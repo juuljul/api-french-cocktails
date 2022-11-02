@@ -8,7 +8,7 @@ let cocktails = [
       strIngredient3: "Sucre en poudre",
       strMeasure1: "45 ml",
       strMeasure2: "Jus de 1/2 citron",
-      strMeasure3: "1 cuillère a cafe",
+      strMeasure3: "1 cuillère à cafe",
       strDrinkThumb: "http://localhost:8000/images/daiquiri.png"
     },
     {
@@ -21,7 +21,7 @@ let cocktails = [
       strIngredient4: "Menthe",
       strMeasure1: "80 ml",
       strMeasure2: "Jus de 1 citron",
-      strMeasure3: "2 cuillères a cafe",
+      strMeasure3: "2 cuillères à cafe",
       strMeasure3: "4 feuilles",
       strDrinkThumb: "http://localhost:8000/images/mojito.png"
     },
