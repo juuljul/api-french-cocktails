@@ -4,6 +4,8 @@ const getCocktails = require('../controllers/cocktails')
 const getCocktail = require('../controllers/cocktail')
 const { getMyCocktails, addCocktail, getMyCocktail } = require('../controllers/mycocktails')
 
+const MyCocktail = require('../models/MyCocktail');
+
 
 router.get('/cocktail', function (req, res) {
 	const { id } = req.query
@@ -27,27 +29,54 @@ router.get('/cocktails', function (req, res, next) {
 
 
 router.post('/mycocktails', (req, res, next) => {
-	console.log(req.body);
-	addCocktail(req.body)
-	res.status(201).json({
-	  message: 'Cocktail créé !'
+	const myCocktail = new MyCocktail({
+		strDrink: req.body.strDrink,
+		strInstructions: req.body.strInstructions,
+		strIngredient1: req.body.strIngredient1,
+		strMeasure1: req.body.strMeasure1
 	});
+	myCocktail.save().then(
+	() => {
+		res.status(201).json({
+		message: 'Post saved successfully!'
+		});
+	}
+	).catch(
+	(error) => {
+		res.status(400).json({
+		error: error
+		});
+	}
+	);
 });
 
 
+
+
 router.get('/mycocktails', function (req, res, next) {
-	let cocktails = getMyCocktails()
-	res.status(200).json(cocktails);
+	MyCocktail.find().then(
+		(mycocktails) => {
+		  let cocktails ={}
+		  cocktails.drinks = mycocktails
+		  res.status(200).json(cocktails);
+		  console.log(cocktails)
+		}
+	  ).catch(
+		(error) => {
+		  res.status(400).json({
+			error: error
+		  });
+		}
+	  );
 })
+
+
 
 router.get('/mycocktail', function (req, res) {
 	const { id } = req.query
 	let drinks = []
 	const drink = getMyCocktail(id)
 	drinks.push(drink)
-	console.log('id', id)
-	console.log('drink', drink)
-	console.log('drinks', drinks)
 	let cocktailData = {}
 	cocktailData.drinks = drinks
 		if (!cocktailData) {
