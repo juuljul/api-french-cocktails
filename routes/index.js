@@ -2,10 +2,8 @@ const express = require('express')
 const router = express.Router()
 const getCocktails = require('../controllers/cocktails')
 const getCocktail = require('../controllers/cocktail')
-const { getMyCocktails, addCocktail, getMyCocktail } = require('../controllers/mycocktails')
 
-const MyCocktail = require('../models/MyCocktail');
-
+const myCocktailsCtrl = require('../controllers/myCocktails');
 
 router.get('/cocktail', function (req, res) {
 	const { id } = req.query
@@ -27,70 +25,8 @@ router.get('/cocktails', function (req, res, next) {
 	res.status(200).json(cocktails);
 })
 
-
-router.post('/mycocktails', (req, res, next) => {
-	const myCocktail = new MyCocktail({
-		strDrink: req.body.strDrink,
-		strInstructions: req.body.strInstructions,
-		strIngredient1: req.body.strIngredient1,
-		strMeasure1: req.body.strMeasure1
-	});
-	myCocktail.save().then(
-	() => {
-		res.status(201).json({
-		message: 'Post saved successfully!'
-		});
-	}
-	).catch(
-	(error) => {
-		res.status(400).json({
-		error: error
-		});
-	}
-	);
-});
-
-
-router.get('/mycocktails', function (req, res, next) {
-	MyCocktail.find().then(
-		(mycocktails) => {
-		  let cocktails ={}
-		  cocktails.drinks = mycocktails
-		  res.status(200).json(cocktails);
-		  console.log(cocktails)
-		}
-	  ).catch(
-		(error) => {
-		  res.status(400).json({
-			error: error
-		  });
-		}
-	  );
-})
-
-
-
-
-router.get('/mycocktail', function (req, res) {
-	const { id } = req.query
-	MyCocktail.findOne({
-		strDrink: id
-	  }).then(
-		(drink) => {
-		  let drinks = []
-		  drinks.push(drink)
-		  let cocktail = {}
-		  cocktail.drinks = drinks
-		  res.status(200).json(cocktail);
-		}
-	  ).catch(
-		(error) => {
-		  res.status(404).json({
-			error: error
-		  });
-		}
-	  );
-})
-
+router.post('/mycocktails', myCocktailsCtrl.createCocktail)
+router.get('/mycocktails', myCocktailsCtrl.getMyCocktails)
+router.get('/mycocktail', myCocktailsCtrl.getOneOfMyCocktails)
 
 module.exports = router
