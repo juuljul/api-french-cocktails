@@ -51,8 +51,6 @@ router.post('/mycocktails', (req, res, next) => {
 });
 
 
-
-
 router.get('/mycocktails', function (req, res, next) {
 	MyCocktail.find().then(
 		(mycocktails) => {
@@ -72,18 +70,26 @@ router.get('/mycocktails', function (req, res, next) {
 
 
 
+
 router.get('/mycocktail', function (req, res) {
 	const { id } = req.query
-	let drinks = []
-	const drink = getMyCocktail(id)
-	drinks.push(drink)
-	let cocktailData = {}
-	cocktailData.drinks = drinks
-		if (!cocktailData) {
-			res.status(400).send('Not found.')
-		} else {
-			res.status(200).json(cocktailData);
+	MyCocktail.findOne({
+		strDrink: id
+	  }).then(
+		(drink) => {
+		  let drinks = []
+		  drinks.push(drink)
+		  let cocktail = {}
+		  cocktail.drinks = drinks
+		  res.status(200).json(cocktail);
 		}
+	  ).catch(
+		(error) => {
+		  res.status(404).json({
+			error: error
+		  });
+		}
+	  );
 })
 
 
