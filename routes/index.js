@@ -1,29 +1,11 @@
 const express = require('express')
 const router = express.Router()
-const getCocktails = require('../controllers/cocktails')
-const getCocktail = require('../controllers/cocktail')
 
 const myCocktailsCtrl = require('../controllers/myCocktails');
+const frenchCocktailsCtrl = require('../controllers/frenchCocktails');
 
-router.get('/cocktail', function (req, res) {
-	const { id } = req.query
-	let drinks = []
-	const drink = getCocktail(id)
-	drinks.push(drink)
-	let cocktailData = {}
-	cocktailData.drinks = drinks
-		if (!cocktailData) {
-			res.status(400).send('Not found.')
-		} else {
-			// res.send({ cocktailData })
-			res.status(200).json(cocktailData);
-		}
-})
-
-router.get('/cocktails', function (req, res, next) {
-	let cocktails = getCocktails()
-	res.status(200).json(cocktails);
-})
+router.get('/cocktail', frenchCocktailsCtrl.getOneFrenchCocktail)
+router.get('/cocktails', frenchCocktailsCtrl.getFrenchCocktails)
 
 router.post('/mycocktails', myCocktailsCtrl.createCocktail)
 router.get('/mycocktails', myCocktailsCtrl.getMyCocktails)
