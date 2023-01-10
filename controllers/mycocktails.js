@@ -2,12 +2,20 @@ const MyCocktail = require('../models/MyCocktail');
 
 
 exports.createCocktail = (req, res, next) => {
+
     const myCocktail = new MyCocktail({
 		strDrink: req.body.strDrink,
 		strInstructions: req.body.strInstructions,
-		strIngredient1: req.body.strIngredient1,
-		strMeasure1: req.body.strMeasure1
 	});
+
+	for (let i=1; i<7; i++){
+		const strIngredient = "strIngredient"+i
+		const strMeasure = "strMeasure"+i
+		myCocktail[strIngredient] = req.body[strIngredient]
+		myCocktail[strMeasure] = req.body[strMeasure]
+	}
+
+
 	myCocktail.save().then(
 	() => {
 		res.status(201).json({
@@ -30,7 +38,6 @@ exports.getMyCocktails = (req, res, next) => {
 		  let cocktails ={}
 		  cocktails.drinks = mycocktails
 		  res.status(200).json(cocktails);
-		  console.log(cocktails)
 		}
 	  ).catch(
 		(error) => {
